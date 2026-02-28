@@ -1,4 +1,5 @@
 #include "libufdt_sysdeps.h"
+#include <Library/MemoryAllocationLib.h>
 #define EFI_DTBO_ERROR -1
 #define PRE_ALLOC_BUFFER_SZ (5 * 1024 * 1024)
 
@@ -234,7 +235,30 @@ char *dto_strdup(const char *s) {
 char *dto_strchr(const char *s, int c) { return strchr(s, c); }
 
 unsigned long int dto_strtoul(const char *nptr, char **endptr, int base) {
-  return strtoul(nptr, endptr, base);
+  unsigned long int result = 0;
+  const char *p = nptr;
+  while (*p == ' ' || *p == '\t') p++;
+  if (base == 0 || base == 16) {
+    if (p[0] == '0' && (p[1] == 'x' || p[1] == 'X')) {
+      base = 16;
+      p += 2;
+    } else if (base == 0) {
+      base = (*p == '0') ? 8 : 10;
+      if (base == 8) p++;
+    }
+  }
+  while (*p) {
+    int digit;
+    if (*p >= '0' && *p <= '9') digit = *p - '0';
+    else if (*p >= 'a' && *p <= 'f') digit = *p - 'a' + 10;
+    else if (*p >= 'A' && *p <= 'F') digit = *p - 'A' + 10;
+    else break;
+    if (digit >= base) break;
+    result = result * (unsigned long int)base + digit;
+    p++;
+  }
+  if (endptr) *endptr = (char *)p;
+  return result;
 }
 
 size_t dto_strlen(const char *s) { return strlen(s); }

@@ -10,7 +10,6 @@
 ##
 
 [Components]
-  !include $(SHARED_CRYPTO_PATH)/Driver/Bin/CryptoDriver.inc.dsc
 
 [PcdsFeatureFlag.common]
   gArmTokenSpaceGuid.PcdCpuDxeProduceDebugSupport|FALSE
@@ -235,6 +234,10 @@
   #
   RngLib|MdePkg/Library/DxeRngLib/DxeRngLib.inf
   Hash2CryptoLib|SecurityPkg/Library/BaseHash2CryptoLibNull/BaseHash2CryptoLibNull.inf
+  # GlieseOS: use null/stub crypto since we removed the pre-built edk2-basecrypto-driver-bin
+  BaseCryptLib|CryptoPkg/Library/BaseCryptLibNull/BaseCryptLibNull.inf
+  TlsLib|CryptoPkg/Library/TlsLibNull/TlsLibNull.inf
+  IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
 
   #
   # Secure Boot dependencies
