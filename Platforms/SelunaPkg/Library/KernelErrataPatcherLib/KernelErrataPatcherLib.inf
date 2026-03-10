@@ -24,9 +24,6 @@
   Mmu.c
   Utilities.c
 
-[Sources.AARCH64]
-  OsLoaderHelper.S | GCC
-
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
@@ -44,6 +41,3 @@
 [Protocols]
   gEfiMemoryAttributeProtocolGuid
 
-[Guids]
-  gEfiEventExitBootServicesGuid       ## CONSUMES
-  gEfiEventReadyToBootGuid

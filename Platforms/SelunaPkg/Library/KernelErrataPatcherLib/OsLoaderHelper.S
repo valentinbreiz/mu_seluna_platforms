@@ -10,21 +10,5 @@
   SPDX-License-Identifier: MIT
 
 **/
-#include "KernelErrataPatcherLib.h"
-
-GCC_ASM_IMPORT (KernelErrataPatcherExitBootServices)
-GCC_ASM_EXPORT (ExitBootServicesWrapper)
-
-// Wrapper around Exit boot service for hooking into winload.efi
-
-//EFI_STATUS
-//EFIAPI
-//ExitBootServicesWrapper (
-//  IN EFI_HANDLE ImageHandle, IN UINTN MapKey
-//  );
-ExitBootServicesWrapper:
-        // the x30 register contains the last return addr
-        mov x2, x30
-
-        // Go for it
-        b KernelErrataPatcherExitBootServices
+// ExitBootServicesWrapper has been removed.
+// This firmware only boots Limine; no ExitBootServices hook is needed.

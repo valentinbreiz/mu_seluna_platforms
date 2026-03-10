@@ -25,7 +25,14 @@ EFI_PHYSICAL_ADDRESS LocateWinloadBase(EFI_PHYSICAL_ADDRESS base, UINTN *size)
     base += EFI_PAGE_SIZE;
   }
 
-  do {
+  // Scan backwards page by page looking for the MZ+PE header of the loader
+  // image.  Stop at SCAN_MAX distance or the first physical page to avoid
+  // scanning into unmapped memory and taking a Data Abort on hardware with
+  // discontiguous physical memory regions (e.g. Qualcomm SoCs).
+  EFI_PHYSICAL_ADDRESS scan_limit =
+      (base > SCAN_MAX) ? (base - SCAN_MAX) : EFI_PAGE_SIZE;
+
+  while (base >= EFI_PAGE_SIZE && base >= scan_limit) {
     if (*(UINT16 *)base == IMAGE_DOS_SIGNATURE) {
       UINT32               newBaseOffset = *(UINT32 *)(base + 0x3C);
       EFI_PHYSICAL_ADDRESS newBase       = base + newBaseOffset;
@@ -36,14 +43,16 @@ EFI_PHYSICAL_ADDRESS LocateWinloadBase(EFI_PHYSICAL_ADDRESS base, UINTN *size)
           *size &= ~(EFI_PAGE_SIZE - 1);
           *size += EFI_PAGE_SIZE;
         }
-        break;
+        return base;
       }
     }
 
     base -= EFI_PAGE_SIZE;
-  } while (TRUE);
+  }
 
-  return base;
+  // No PE header found before reaching the bottom of addressable memory.
+  *size = 0;
+  return 0;
 }
 
 VOID CopyMemory(

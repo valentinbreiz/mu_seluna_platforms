@@ -42,7 +42,7 @@
   gEfiMdePkgTokenSpaceGuid.PcdMaximumLinkedListLength|1000000
   gEfiMdePkgTokenSpaceGuid.PcdSpinLockTimeout|10000000
   gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|320
-  gAdvLoggerPkgTokenSpaceGuid.PcdAdvancedLoggerPreMemPages|3
+  # gAdvLoggerPkgTokenSpaceGuid.PcdAdvancedLoggerPreMemPages|3  # AdvancedFileLogger disabled
   gEfiNetworkPkgTokenSpaceGuid.PcdEnforceSecureRngAlgorithms|FALSE
 
 !if $(TARGET) == DEBUG
@@ -451,7 +451,8 @@
   VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLibRuntimeDxe.inf
 
 [Components.common]
-  AdvLoggerPkg/AdvancedFileLogger/AdvancedFileLogger.inf
+  # AdvancedFileLogger disabled: hangs ExitBootServices via file I/O after timers stop.
+  # AdvLoggerPkg/AdvancedFileLogger/AdvancedFileLogger.inf
 
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
 
@@ -505,7 +506,8 @@
   MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
-  MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableDxe/FirmwarePerformanceDxe.inf
+  # FirmwarePerformanceDxe disabled: not needed for Limine booting.
+  # MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableDxe/FirmwarePerformanceDxe.inf
 
   MdeModulePkg/Universal/BdsDxe/BdsDxe.inf {
     <LibraryClasses>

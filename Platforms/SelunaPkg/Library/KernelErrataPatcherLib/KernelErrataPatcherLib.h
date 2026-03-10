@@ -32,7 +32,7 @@
 
 #include <Protocol/MemoryAttribute.h>
 
-#define SILENT 1
+#define SILENT 0
 
 #if SILENT == 0
 
@@ -60,16 +60,6 @@
   (IN_RANGE((x & (~0x20)), 'A', 'F') ? ((x & (~0x20)) - 'A' + 0xA)             \
                                      : (IN_RANGE(x, '0', '9') ? x - '0' : 0))
 #define GET_BYTE(a, b) (GET_BITS(a) << 4 | GET_BITS(b))
-
-EFI_STATUS
-EFIAPI
-KernelErrataPatcherExitBootServices(
-    IN EFI_HANDLE ImageHandle, IN UINTN MapKey,
-    IN EFI_PHYSICAL_ADDRESS fwpKernelSetupPhase1);
-
-EFI_STATUS
-EFIAPI
-ExitBootServicesWrapper(IN EFI_HANDLE ImageHandle, IN UINTN MapKey);
 
 EFI_PHYSICAL_ADDRESS LocateWinloadBase(EFI_PHYSICAL_ADDRESS base, UINTN *size);
 

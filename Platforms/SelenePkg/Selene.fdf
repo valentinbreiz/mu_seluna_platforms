@@ -120,7 +120,10 @@ READ_LOCK_STATUS   = TRUE
     SECTION RAW = SelenePkg/Include/Resources/RegulatoryLogos.png
   }
 
-  INF AdvLoggerPkg/AdvancedFileLogger/AdvancedFileLogger.inf
+  # AdvancedFileLogger is disabled: its BeforeExitBootServices callback calls
+  # WriteLogFiles() which does eMMC/USB file I/O after timers are stopped,
+  # causing ExitBootServices to hang and never return to Limine.
+  # INF AdvLoggerPkg/AdvancedFileLogger/AdvancedFileLogger.inf
 
   INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   INF ArmPkg/Drivers/CpuDxe/CpuDxe.inf
@@ -137,7 +140,8 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Core/Dxe/DxeMain.inf
   INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
   INF MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
-  INF MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableDxe/FirmwarePerformanceDxe.inf
+  # FirmwarePerformanceDxe is disabled: not needed for Limine booting.
+  # INF MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableDxe/FirmwarePerformanceDxe.inf
   INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
   INF MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
   INF MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
